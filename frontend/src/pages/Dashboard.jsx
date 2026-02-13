@@ -16,7 +16,8 @@ export default function Dashboard() {
       const res = await api.get("/tasks");
       setTasks(res.data);
     } catch (error) {
-      navigate("/login");
+      // navigate("/login");
+      console.log(error)
     }
   };
 
