@@ -9,21 +9,6 @@ export default function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
-
-  // ✅ Load tasks
-  // useEffect(() => {
-  //   const fetchTasks = async () => {
-  //     try {
-  //       const res = await api.get("/tasks");
-  //       setTasks(res.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //       navigate("/login"); // if unauthorized
-  //     }
-  //   };
-
-  //   fetchTasks();
-  // }, [navigate]);
   
   useEffect(() => {
   const fetchTasks = async () => {
