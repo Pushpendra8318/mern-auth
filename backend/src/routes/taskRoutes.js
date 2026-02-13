@@ -10,7 +10,7 @@ import { protect } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // protect all task routes
-router.use(protect);
+// router.use(protect);
 
 // CRUD routes
 router.post("/", createTask);
