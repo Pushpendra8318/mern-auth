@@ -82,7 +82,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mern-auth-nu-three.vercel.app/"
+    "https://your-frontend-name.vercel.app"
   ],
   credentials: true
 }));
