@@ -15,7 +15,7 @@ app.use(cookieParser());
 
 app.use(cors({
   origin: [
-    "https://mern-auth-nu-three.vercel.app/"
+    "https://mern-auth-nu-three.vercel.app"
   ],
   credentials: true
 }));
