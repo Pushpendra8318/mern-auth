@@ -1,45 +1,152 @@
 
 
+// import bcrypt from "bcryptjs";
+// import User from "../models/User.js";
+// import generateToken from "../utils/generateToken.js";
+
+// /* ======================
+//    REGISTER
+// ====================== */
+// export const registerUser = async (req, res) => {
+//   try {
+//     console.log("👉 REGISTER ROUTE HIT");
+
+//     const { name, email, password } = req.body;
+
+//     const userExists = await User.findOne({ email });
+//     if (userExists) {
+//       return res.status(400).json({ message: "User already exists" });
+//     }
+
+//     const user = await User.create({
+//       name,
+//       email,
+//       password,
+//     });
+
+//     const token = generateToken(user._id);
+
+//     res.cookie("token", token, {
+// <<<<<<< Updated upstream
+//       httpOnly: true,
+//       secure: true,
+//       sameSite: "none",
+//       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+//     });
+// =======
+//   httpOnly: true,
+//   secure: false,
+//   sameSite: "lax",   // ✅ FIXED
+//   maxAge: 7 * 24 * 60 * 60 * 1000,
+// });
+// >>>>>>> Stashed changes
+
+//     res.status(201).json({
+//       message: "Registered successfully",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Registration Failed" });
+//   }
+// };
+
+// /* ======================
+//    LOGIN
+// ====================== */
+// export const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
+//   console.log("LOGIN HIT:", req.body.email);
+
+
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(401).json({ message: "Invalid credentials" });
+//     }
+
+//     const token = generateToken(user._id);
+
+//     // ✅ set cookie
+//     res.cookie("token", token, {
+// <<<<<<< Updated upstream
+//       httpOnly: true,
+//       secure: true,
+//       sameSite: "none",
+//       maxAge: 7 * 24 * 60 * 60 * 1000,
+//     });
+// =======
+//   httpOnly: true,
+//   secure: false,
+//   sameSite: "lax",   // ✅ FIXED
+//   maxAge: 7 * 24 * 60 * 60 * 1000,
+// });
+// >>>>>>> Stashed changes
+
+//     res.status(200).json({
+//       message: "Login successful",
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: "Login Failed" });
+//   }
+// };
+
+// /* ======================
+//    LOGOUT
+// ====================== */
+// export const logoutUser = (req, res) => {
+//   res.cookie("token", "", {
+//     httpOnly: true,
+//     expires: new Date(0), // ⬅️ clears cookie
+//   });
+
+//   res.status(200).json({
+//     message: "Logged out successfully",
+//   });
+// };
+
+
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
-/* ======================
+/* 
    REGISTER
-====================== */
+*/
 export const registerUser = async (req, res) => {
   try {
     console.log("👉 REGISTER ROUTE HIT");
 
     const { name, email, password } = req.body;
 
+    // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
 
+    // Create user
     const user = await User.create({
       name,
       email,
       password,
     });
 
+    // Generate JWT
     const token = generateToken(user._id);
 
+    // Set HttpOnly cookie (LOCALHOST SAFE)
     res.cookie("token", token, {
-<<<<<<< Updated upstream
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,        // ❗ must be false on localhost
+      sameSite: "lax",      // ❗ correct for localhost
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-=======
-  httpOnly: true,
-  secure: false,
-  sameSite: "lax",   // ✅ FIXED
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
->>>>>>> Stashed changes
 
     res.status(201).json({
       message: "Registered successfully",
@@ -50,42 +157,37 @@ export const registerUser = async (req, res) => {
   }
 };
 
-/* ======================
+/* 
    LOGIN
-====================== */
+ */
 export const loginUser = async (req, res) => {
   try {
+    console.log("👉 LOGIN ROUTE HIT:", req.body.email);
+
     const { email, password } = req.body;
-  console.log("LOGIN HIT:", req.body.email);
 
-
+    // Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Match password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
+    // Generate JWT
     const token = generateToken(user._id);
 
-    // ✅ set cookie
+    // Set HttpOnly cookie (LOCALHOST SAFE)
     res.cookie("token", token, {
-<<<<<<< Updated upstream
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: false,        // ❗ must be false on localhost
+      sameSite: "lax",      // ❗ correct for localhost
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-=======
-  httpOnly: true,
-  secure: false,
-  sameSite: "lax",   // ✅ FIXED
-  maxAge: 7 * 24 * 60 * 60 * 1000,
-});
->>>>>>> Stashed changes
 
     res.status(200).json({
       message: "Login successful",
@@ -96,13 +198,13 @@ export const loginUser = async (req, res) => {
   }
 };
 
-/* ======================
+/* 
    LOGOUT
-====================== */
+ */
 export const logoutUser = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
-    expires: new Date(0), // ⬅️ clears cookie
+    expires: new Date(0), // clears cookie
   });
 
   res.status(200).json({
