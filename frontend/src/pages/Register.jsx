@@ -9,12 +9,29 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    const res = await api.post("/auth/register", { name, email, password });
-    localStorage.setItem("token", res.data.token);
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   const res = await api.post("/auth/register", { name, email, password });
+  //   localStorage.setItem("token", res.data.token);
+  //   navigate("/dashboard");
+  // };
+
+
+
+const submitHandler = async (e) => {
+  e.preventDefault();
+
+  try {
+    await api.post("/auth/register", { name, email, password });
     navigate("/dashboard");
-  };
+  } catch (error) {
+    alert("Registration failed");
+  }
+};
+
+
+
+
 
   return (
     <motion.div className="container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

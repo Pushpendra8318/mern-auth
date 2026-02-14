@@ -9,13 +9,26 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  // const submitHandler = async (e) => {
+  //   e.preventDefault();
+  //   const res = await api.post("/auth/login", { email, password });
+  //   // const res = await axios.post("http://localhost:5000/api/v1/auth/login", {email, password}, {withCredentials:true})
+  //   localStorage.setItem("token", res.data.token);
+  //   navigate("/dashboard");
+  // };
+
+
   const submitHandler = async (e) => {
-    e.preventDefault();
-    const res = await api.post("/auth/login", { email, password });
-    // const res = await axios.post("http://localhost:5000/api/v1/auth/login", {email, password}, {withCredentials:true})
-    localStorage.setItem("token", res.data.token);
+  e.preventDefault();
+
+  try {
+    await api.post("/auth/login", { email, password });
     navigate("/dashboard");
-  };
+  } catch (error) {
+    alert("Login failed");
+  }
+};
+
 
   return (
     <motion.div className="container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

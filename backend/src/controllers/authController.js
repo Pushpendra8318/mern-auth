@@ -9,6 +9,8 @@ import generateToken from "../utils/generateToken.js";
 ====================== */
 export const registerUser = async (req, res) => {
   try {
+    console.log("👉 REGISTER ROUTE HIT");
+
     const { name, email, password } = req.body;
 
     const userExists = await User.findOne({ email });
@@ -24,13 +26,20 @@ export const registerUser = async (req, res) => {
 
     const token = generateToken(user._id);
 
-    // ✅ set cookie
     res.cookie("token", token, {
+<<<<<<< Updated upstream
       httpOnly: true,
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
+=======
+  httpOnly: true,
+  secure: false,
+  sameSite: "lax",   // ✅ FIXED
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+>>>>>>> Stashed changes
 
     res.status(201).json({
       message: "Registered successfully",
@@ -47,6 +56,8 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+  console.log("LOGIN HIT:", req.body.email);
+
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -62,11 +73,19 @@ export const loginUser = async (req, res) => {
 
     // ✅ set cookie
     res.cookie("token", token, {
+<<<<<<< Updated upstream
       httpOnly: true,
       secure: true,
       sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+=======
+  httpOnly: true,
+  secure: false,
+  sameSite: "lax",   // ✅ FIXED
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+>>>>>>> Stashed changes
 
     res.status(200).json({
       message: "Login successful",
